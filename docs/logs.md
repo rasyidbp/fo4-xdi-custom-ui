@@ -163,7 +163,7 @@ Before
 ![Before.](image3.png)
 
 After
-![After.](image4.png)
+![After.](image3.1.png)
 
 ## Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
@@ -207,7 +207,7 @@ fixes the sizing problem with thinner icons such as Exit and Inventory, scales b
 # Adjust Opacity.
 
 ## Preview
-![Adjust Background Opacity.](image5.png)
+![Adjust Background Opacity.](image4.png)
 
 ## Changes
 `Interface/DialogueMenu.swf/shapes/DefineShape3(chid:28)`
@@ -232,7 +232,7 @@ Changed the shape fill color from black to white and increased the fill alpha fr
 # Adjust NPC speaker name color.
 
 ## Preview
-![Adjust NPC speaker name color.](image6.png)
+![Adjust NPC speaker name color.](image5.png)
 
 ## Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueMenu.as/populateArray()`
@@ -251,11 +251,48 @@ setproperty QName(PackageNamespace(""),"colorTransform")
 ```
 This gets the `name_tf` text field, accesses its `transform`, and applies `myShared.ct_UI_color` to its `colorTransform`.
 
-3. P-code-specific note
+2. P-code-specific note
 
-This is a P-code-only modification to DialogueMenu, rather than a change to the original .as source code. The additional instructions are inserted into populateArray, immediately after the existing name_tf.text assignment.
+This is a P-code-only modification to `DialogueMenu`, rather than a change to the original `.as` source code. The additional instructions are inserted into `populateArray`, immediately after the existing `name_tf.text` assignment.
 
-The reason for making this change through P-code is that editing DialogueMenu.as with FFDec causes the game to crash when it attempts to open a dialogue box. Because of this, modifying the P-code directly avoids the crash while still allowing the desired color transform to be applied.
+The reason for making this change through P-code is that editing `DialogueMenu.as` with FFDec causes the game to crash when it attempts to open a dialogue box. Because of this, modifying the P-code directly avoids the crash while still allowing the desired color transform to be applied.
 
 ## Summary
-Added name_tf.transform.colorTransform = myShared.ct_UI_color to make the dialogue speaker name follow the configured UI color. This version is done directly in P-code to avoid the crash encountered when modifying DialogueMenu.as
+Added `name_tf.transform.colorTransform = myShared.ct_UI_color` to make the dialogue speaker name follow the configured UI color. This version is done directly in P-code to avoid the crash encountered when modifying `DialogueMenu.as`.
+
+# Clean up dialogue font and icon layout.
+## Preview
+![Clean up dialogue font and icon layout.](image6.png)
+
+## Changes
+`Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
+
+1. Moved hard-coded values into constants
+
+Font, size, leading, and padding can now be changed in one place:
+```
+private static const FONT_NEW_FORMAT:String = "$MAIN_Font_Bold";
+private static const FONT_BOLD:Boolean = true;
+private static const FONT_SIZE:Number = 24;
+private static const FONT_LEADING:Number = 4;
+private static const PADDING:Number = 4;
+```
+Instead of hard-coding them throughout the code.
+
+2. Simplified icon placement
+
+The icon positioning is now much cleaner. It uses `FONT_SIZE` and `PADDING` directly, with a small offset:
+```
+var scale:Number = FONT_SIZE / Math.max(_loc4_.width,_loc4_.height);
+var iconOffset:Number = FONT_SIZE * 0.05;
+
+this.icon_placeholder.x = this.textField.x - FONT_SIZE - PADDING - iconOffset;
+this.icon_placeholder.y = this.textField.y + (this.textField.height - FONT_SIZE) / 2 + iconOffset;
+
+_loc4_.x = (FONT_SIZE - _loc4_.width) / 2;
+_loc4_.y = (FONT_SIZE - _loc4_.height) / 2;
+```
+This replaces the more complicated bounds-based positioning.
+
+## Summary
+Cleans up the code and makes customization easier. Font size, leading, and padding are now controlled from a few constants, and the icon positioning is simpler and easier to adjust.
