@@ -1,9 +1,10 @@
-# Adjust font style, size, leading, letter spacing and color.
+# Logs
+## Adjust font style, size, leading, letter spacing and color.
 
-## Preview
+### Preview
 ![Adjust font style, size, leading, letter spacing and color.](image.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Add the text import
@@ -63,15 +64,15 @@ if(param1.type == 1)
     this.textField.setTextFormat(this.customFormat);
 }
 ```
-## Summary
+### Summary
 Modified font + 24px size + bold + white text + formatting reapplied after text replacement. Everything else is unchanged.
 
-# Adjust icon color and position.
+## Adjust icon color and position.
 
-## Preview
+### Preview
 ![Adjust icon color and position.](image2.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Icon placeholder position is no longer fixed
@@ -153,19 +154,19 @@ This makes the icon:
 * Use the text leading as spacing between the icon and text
 
 
-## Summary
+### Summary
 Restores custom text colors, removes the fixed icon position, and makes the icons automatically scale and align with the dialogue text.
 
-# Fix exit and inventory icon alignment.
+## Fix exit and inventory icon alignment.
 
-## Preview
+### Preview
 Before
 ![Before.](image3.png)
 
 After
 ![After.](image3.1.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 `Interface/DialogueMenu.swf/shapes/`
 
@@ -201,15 +202,15 @@ The icon vector shapes were also manually cleaned up and moved closer to the 0,0
 
 This reduces the amount of offset that has to be corrected in code and makes the different icons behave more consistently when they are scaled and positioned.
 
-## Summary
+### Summary
 fixes the sizing problem with thinner icons such as Exit and Inventory, scales based on the icon's largest dimension, uses the actual vector bounds for positioning, and cleans up the underlying icon vectors by moving their shapes closer to 0,0.
 
-# Adjust Opacity.
+## Adjust Opacity.
 
-## Preview
+### Preview
 ![Adjust Background Opacity.](image4.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/shapes/DefineShape3(chid:28)`
 
 Changed `DefineShape3(chid:28)` on:
@@ -226,15 +227,15 @@ New:
 ```
 The shape fill was changed from black with 40 alpha to white with 65 alpha.
 
-## Summary
+### Summary
 Changed the shape fill color from black to white and increased the fill alpha from 40 to 65, making the background trigger the color catcher now it got some UI color and more visible.
 
-# Adjust NPC speaker name color.
+## Adjust NPC speaker name color.
 
-## Preview
+### Preview
 ![Adjust NPC speaker name color.](image5.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueMenu.as/populateArray()`
 
 1. Added the name_tf color transform
@@ -257,14 +258,14 @@ This is a P-code-only modification to `DialogueMenu`, rather than a change to th
 
 The reason for making this change through P-code is that editing `DialogueMenu.as` with FFDec causes the game to crash when it attempts to open a dialogue box. Because of this, modifying the P-code directly avoids the crash while still allowing the desired color transform to be applied.
 
-## Summary
+### Summary
 Added `name_tf.transform.colorTransform = myShared.ct_UI_color` to make the dialogue speaker name follow the configured UI color. This version is done directly in P-code to avoid the crash encountered when modifying `DialogueMenu.as`.
 
-# Clean up dialogue font and icon layout.
-## Preview
+## Clean up dialogue font and icon layout.
+### Preview
 ![Clean up dialogue font and icon layout.](image6.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Moved hard-coded values into constants
@@ -294,5 +295,57 @@ _loc4_.y = (FONT_SIZE - _loc4_.height) / 2;
 ```
 This replaces the more complicated bounds-based positioning.
 
-## Summary
+### Summary
 Cleans up the code and makes customization easier. Font size, leading, and padding are now controlled from a few constants, and the icon positioning is simpler and easier to adjust.
+
+## Replace Dialogue Icons with Charisma Text
+### Preview 
+![no-icon](image7.png)
+
+### Changes
+1. Removed the dialogue icons
+
+The normal dialogue icon handling was removed. The only remaining icon is the speech icon used internally for detecting a Charisma check.
+```
+if(myShared.showIcons)
+{
+   if(param1.challengeLevel > 0 && param1.challengeResult == -1)
+   {
+      _loc4_ = new icon_speech();
+   }
+}
+```
+The actual icon is no longer used for display.
+
+2. Added custom Charisma check text
+
+When a Charisma check appears, the dialogue option now gets a text prefix showing the required Charisma level:
+```
+this.textField.text = "[Charisma " + String(param1.challengeLevel) + "] " + this.textField.text;
+```
+For example:
+
+`[Charisma 2] 100 caps is not enough.`
+
+3. Added color formatting for the Charisma text
+
+The new Charisma label keeps the existing difficulty colors:
+```
+this.challengeFormat.color = myShared.getColor(_loc5_);
+
+var checkLength:int = ("[Charisma " + String(param1.challengeLevel) + "] ").length;
+this.textField.setTextFormat(this.challengeFormat,0,checkLength);
+```
+So the `[Charisma X]` text can use the same yellow, orange, or red colors that were previously used by the Charisma icon.
+
+4. Adjusted normal dialogue text position
+
+Since there is no longer an icon taking up space, normal dialogue entries are moved back.
+
+else
+{
+   this.textField.x = 0;
+}
+
+### Summary
+The dialogue icons were removed from the UI and Charisma checks are now displayed directly in the dialogue text as `[Charisma X]`, while keeping the existing difficulty colors.
