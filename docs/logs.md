@@ -300,7 +300,7 @@ Cleans up the code and makes customization easier. Font size, leading, and paddi
 
 ## Replace Dialogue Icons with Charisma Text
 ### Preview 
-![no-icon](image7.png)
+![no-icon](image7_no-icon.png)
 
 ### Changes
 1. Removed the dialogue icons
