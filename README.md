@@ -10,10 +10,10 @@ Custom layout tweaks for Extended Dialogue Interface (XDI). Restyles the XDI dia
 * [Extended Dialogue Interface - Line Spacing and Opacity Tweaks](https://www.nexusmods.com/fallout4/mods/81715) by Ackua for inspiration.
 
 ### Installation
-* Put this in your Fallout 4 installation folder /Fallout 4/Data/
-* The DialogueMenu.swf should be in /Fallout 4/Data/Interface/DialogueMenu.swf
-* This will overwrite the default XDI DialogueMenu.swf from the "XDI - Main.ba2"
-* To remove or uninstall it just delete the DialogueMenu.swf
+* Put the Interface folder in your Fallout 4 installation folder `/Fallout 4/Data/`
+* The DialogueMenu.swf should be in `/Fallout 4/Data/Interface/DialogueMenu.swf`. For example: `C:\Program Files (x86)\Steam\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf` or `D:\SteamLibrary\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf`
+* This will overwrite the default XDI `DialogueMenu.swf` from the `XDI - Main.ba2`
+* To remove or uninstall it just delete the `DialogueMenu.swf` in the Interface folder
 
 ### How to's & Logs
 Read the [configuration guide](docs/how-to.md) to customize it yourself, or check the [logs](docs/logs.md) for recent changes.

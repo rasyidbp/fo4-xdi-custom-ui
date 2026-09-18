@@ -298,7 +298,7 @@ This replaces the more complicated bounds-based positioning.
 ### Summary
 Cleans up the code and makes customization easier. Font size, leading, and padding are now controlled from a few constants, and the icon positioning is simpler and easier to adjust.
 
-## Replace Dialogue Icons with Charisma Text
+## Replace dialogue icons with charisma text
 ### Preview 
 ![no-icon](image7_no-icon.png)
 
@@ -349,3 +349,31 @@ else
 
 ### Summary
 The dialogue icons were removed from the UI and Charisma checks are now displayed directly in the dialogue text as `[Charisma X]`, while keeping the existing difficulty colors.
+
+## Adjust padding
+### Preview
+![fix-padding](image8_no-icon.png)
+
+### Changes
+1. Added right-side padding
+
+Saves the original border width upon entry creation to prevent continuous shrinking:
+```
+private var originalBorderWidth:Number;
+
+this.originalBorderWidth = this.border.width;
+```
+The border width is reduced by PADDING so the dialogue text no longer reaches too close to the right edge:
+```
+var boxWidth:Number = this.originalBorderWidth;
+
+textField.multiline = true;
+textField.wordWrap = true;
+textField.autoSize = "left";
+textField.height = textField.textHeight + PADDING;
+border.height = textField.height;
+border.width = boxWidth - PADDING;
+textField.x = PADDING;
+```
+### Summary
+This patch fixes the right-side spacing by reducing the dialogue box width by the same `PADDING` value used for the text.
