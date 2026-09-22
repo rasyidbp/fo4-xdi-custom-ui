@@ -1,9 +1,10 @@
-# Adjust font style, size, leading, letter spacing and color.
+# Logs 
+## Adjust font style, size, leading, letter spacing and color.
 
-## Preview
+### Preview
 ![Adjust font style, size, leading, letter spacing and color.](image.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Add the text import
@@ -63,15 +64,15 @@ if(param1.type == 1)
     this.textField.setTextFormat(this.customFormat);
 }
 ```
-## Summary
+### Summary
 Modified font + 24px size + bold + white text + formatting reapplied after text replacement. Everything else is unchanged.
 
-# Adjust icon color and position.
+## Adjust icon color and position.
 
-## Preview
+### Preview
 ![Adjust icon color and position.](image2.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Icon placeholder position is no longer fixed
@@ -153,19 +154,19 @@ This makes the icon:
 * Use the text leading as spacing between the icon and text
 
 
-## Summary
+### Summary
 Restores custom text colors, removes the fixed icon position, and makes the icons automatically scale and align with the dialogue text.
 
-# Fix exit and inventory icon alignment.
+## Fix exit and inventory icon alignment.
 
-## Preview
+### Preview
 Before
 ![Before.](image3.png)
 
 After
 ![After.](image3.1.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 `Interface/DialogueMenu.swf/shapes/`
 
@@ -201,15 +202,15 @@ The icon vector shapes were also manually cleaned up and moved closer to the 0,0
 
 This reduces the amount of offset that has to be corrected in code and makes the different icons behave more consistently when they are scaled and positioned.
 
-## Summary
+### Summary
 fixes the sizing problem with thinner icons such as Exit and Inventory, scales based on the icon's largest dimension, uses the actual vector bounds for positioning, and cleans up the underlying icon vectors by moving their shapes closer to 0,0.
 
-# Adjust Opacity.
+## Adjust Opacity.
 
-## Preview
+### Preview
 ![Adjust Background Opacity.](image4.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/shapes/DefineShape3(chid:28)`
 
 Changed `DefineShape3(chid:28)` on:
@@ -226,15 +227,15 @@ New:
 ```
 The shape fill was changed from black with 40 alpha to white with 65 alpha.
 
-## Summary
+### Summary
 Changed the shape fill color from black to white and increased the fill alpha from 40 to 65, making the background trigger the color catcher now it got some UI color and more visible.
 
-# Adjust NPC speaker name color.
+## Adjust NPC speaker name color.
 
-## Preview
+### Preview
 ![Adjust NPC speaker name color.](image5.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueMenu.as/populateArray()`
 
 1. Added the name_tf color transform
@@ -257,14 +258,14 @@ This is a P-code-only modification to `DialogueMenu`, rather than a change to th
 
 The reason for making this change through P-code is that editing `DialogueMenu.as` with FFDec causes the game to crash when it attempts to open a dialogue box. Because of this, modifying the P-code directly avoids the crash while still allowing the desired color transform to be applied.
 
-## Summary
+### Summary
 Added `name_tf.transform.colorTransform = myShared.ct_UI_color` to make the dialogue speaker name follow the configured UI color. This version is done directly in P-code to avoid the crash encountered when modifying `DialogueMenu.as`.
 
-# Clean up dialogue font and icon layout.
-## Preview
+## Clean up dialogue font and icon layout.
+### Preview
 ![Clean up dialogue font and icon layout.](image6.png)
 
-## Changes
+### Changes
 `Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
 1. Moved hard-coded values into constants
@@ -294,5 +295,46 @@ _loc4_.y = (FONT_SIZE - _loc4_.height) / 2;
 ```
 This replaces the more complicated bounds-based positioning.
 
-## Summary
+### Summary
 Cleans up the code and makes customization easier. Font size, leading, and padding are now controlled from a few constants, and the icon positioning is simpler and easier to adjust.
+
+## Add layout constraints and fix padding.
+### Preview
+![fix padding](image7.png)
+
+### Changes
+`Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
+
+1. Added a customizable icon spacing constraint
+
+The icon offset is now controlled from one constant instead of being calculated directly:
+```
+private static const ICON_OFFSET:Number = FONT_SIZE * 0.1;
+```
+This makes the spacing between the icon and text easier to customize.
+
+2. Removed empty icon placeholder indentation
+
+When an icon is present, the text is moved to make room for the icon:
+```
+this.textField.x = PADDING + FONT_SIZE + PADDING;
+```
+When there is no icon, it starts directly at the normal padding:
+```
+textField.x = PADDING;
+```
+3. Fixed the right-side padding
+
+The original border width is stored when the entry is created:
+```
+this.originalBorderWidth = this.border.width;
+```
+Then the border width is reduced by the padding:
+```
+var boxWidth:Number = this.originalBorderWidth;
+border.width = boxWidth - PADDING;
+```
+This prevents the right side from having excessive padding after the text field is resized.
+
+### Summary
+Adds an easy-to-customize icon offset, removes the empty icon indentation, keeps the icon spacing consistent, and fixes the extra right-side padding by reducing the border width by `PADDING`.
