@@ -1,6 +1,8 @@
 # fo4-xdi-custom-ui
 Custom layout tweaks for Extended Dialogue Interface (XDI). Restyles the XDI dialogue box to match Fallout 4's default subtitle style. **This is for Fallout 4 Old Gen (1.10.163.0) XDI.** 
 
+![preview](docs/image8_no-icon.png)
+
 ### Requirements
 * Fallout 4 Old Gen (1.10.163.0). <sub>Check out [Fallout 4 Downgrader](https://www.nexusmods.com/fallout4/mods/81630) by zerratar if you want to downgrade your own fo4.</sub>
 * [Extended Dialogue Interface 1.3.6](https://www.nexusmods.com/fallout4/mods/27216?tab=files&show_file=172181) and their requirements.
@@ -11,7 +13,8 @@ Custom layout tweaks for Extended Dialogue Interface (XDI). Restyles the XDI dia
 
 ### Installation
 * Put the Interface folder in your Fallout 4 installation folder `/Fallout 4/Data/`
-* The DialogueMenu.swf should be in `/Fallout 4/Data/Interface/DialogueMenu.swf`. For example: `C:\Program Files (x86)\Steam\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf` or `D:\SteamLibrary\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf`
+* The DialogueMenu.swf should be in `/Fallout 4/Data/Interface/DialogueMenu.swf`. 
+* For example: `C:\Program Files (x86)\Steam\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf` or `D:\SteamLibrary\steamapps\common\Fallout 4\Data\Interface\DialogueMenu.swf`
 * This will overwrite the default XDI `DialogueMenu.swf` from the `XDI - Main.ba2`
 * To remove or uninstall it just delete the `DialogueMenu.swf` in the Interface folder
 

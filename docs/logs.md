@@ -1,4 +1,14 @@
 # Logs
+
+#### [Adjust font style, size, leading, letter spacing and color.](#adjust-font-style-size-leading-letter-spacing-and-color)
+#### [Adjust icon color and position.](#adjust-icon-color-and-position)
+#### [Fix exit and inventory icon alignment.](#fix-exit-and-inventory-icon-alignment)
+#### [Adjust Opacity.](#adjust-opacity)
+#### [Adjust NPC speaker name color.](#adjust-npc-speaker-name-color)
+#### [Clean up dialogue font and icon layout.](#clean-up-dialogue-font-and-icon-layout)
+#### [Replace dialogue icons with charisma text](#replace-dialogue-icons-with-charisma-text)
+#### [Adjust padding](#adjust-padding)
+
 ## Adjust font style, size, leading, letter spacing and color.
 
 ### Preview
