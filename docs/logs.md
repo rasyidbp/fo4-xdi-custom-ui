@@ -1,14 +1,4 @@
-# Logs
-
-#### [Adjust font style, size, leading, letter spacing and color.](#adjust-font-style-size-leading-letter-spacing-and-color)
-#### [Adjust icon color and position.](#adjust-icon-color-and-position)
-#### [Fix exit and inventory icon alignment.](#fix-exit-and-inventory-icon-alignment)
-#### [Adjust Opacity.](#adjust-opacity)
-#### [Adjust NPC speaker name color.](#adjust-npc-speaker-name-color)
-#### [Clean up dialogue font and icon layout.](#clean-up-dialogue-font-and-icon-layout)
-#### [Replace dialogue icons with charisma text](#replace-dialogue-icons-with-charisma-text)
-#### [Adjust padding](#adjust-padding)
-
+# Logs 
 ## Adjust font style, size, leading, letter spacing and color.
 
 ### Preview
@@ -308,82 +298,43 @@ This replaces the more complicated bounds-based positioning.
 ### Summary
 Cleans up the code and makes customization easier. Font size, leading, and padding are now controlled from a few constants, and the icon positioning is simpler and easier to adjust.
 
-## Replace dialogue icons with charisma text
-### Preview 
-![no-icon](image7_no-icon.png)
-
-### Changes
-1. Removed the dialogue icons
-
-The normal dialogue icon handling was removed. The only remaining icon is the speech icon used internally for detecting a Charisma check.
-```
-if(myShared.showIcons)
-{
-   if(param1.challengeLevel > 0 && param1.challengeResult == -1)
-   {
-      _loc4_ = new icon_speech();
-   }
-}
-```
-The actual icon is no longer used for display.
-
-2. Added custom Charisma check text
-
-When a Charisma check appears, the dialogue option now gets a text prefix showing the required Charisma level:
-```
-this.textField.text = "[Charisma " + String(param1.challengeLevel) + "] " + this.textField.text;
-```
-For example:
-
-`[Charisma 2] 100 caps is not enough.`
-
-3. Added color formatting for the Charisma text
-
-The new Charisma label keeps the existing difficulty colors:
-```
-this.challengeFormat.color = myShared.getColor(_loc5_);
-
-var checkLength:int = ("[Charisma " + String(param1.challengeLevel) + "] ").length;
-this.textField.setTextFormat(this.challengeFormat,0,checkLength);
-```
-So the `[Charisma X]` text can use the same yellow, orange, or red colors that were previously used by the Charisma icon.
-
-4. Adjusted normal dialogue text position
-
-Since there is no longer an icon taking up space, normal dialogue entries are moved back.
-
-else
-{
-   this.textField.x = 0;
-}
-
-### Summary
-The dialogue icons were removed from the UI and Charisma checks are now displayed directly in the dialogue text as `[Charisma X]`, while keeping the existing difficulty colors.
-
-## Adjust padding
+## Add layout constraints and fix padding.
 ### Preview
-![fix-padding](image8_no-icon.png)
+![fix padding](image7.png)
 
 ### Changes
-1. Added right-side padding
+`Interface/DialogueMenu.swf/scripts/<default package>/DialogueListEntry.as`
 
-Saves the original border width upon entry creation to prevent continuous shrinking:
-```
-private var originalBorderWidth:Number;
+1. Added a customizable icon spacing constraint
 
-this.originalBorderWidth = this.border.width;
+The icon offset is now controlled from one constant instead of being calculated directly:
 ```
-The border width is reduced by PADDING so the dialogue text no longer reaches too close to the right edge:
+private static const ICON_OFFSET:Number = FONT_SIZE * 0.1;
 ```
-var boxWidth:Number = this.originalBorderWidth;
+This makes the spacing between the icon and text easier to customize.
 
-textField.multiline = true;
-textField.wordWrap = true;
-textField.autoSize = "left";
-textField.height = textField.textHeight + PADDING;
-border.height = textField.height;
-border.width = boxWidth - PADDING;
+2. Removed empty icon placeholder indentation
+
+When an icon is present, the text is moved to make room for the icon:
+```
+this.textField.x = PADDING + FONT_SIZE + PADDING;
+```
+When there is no icon, it starts directly at the normal padding:
+```
 textField.x = PADDING;
 ```
+3. Fixed the right-side padding
+
+The original border width is stored when the entry is created:
+```
+this.originalBorderWidth = this.border.width;
+```
+Then the border width is reduced by the padding:
+```
+var boxWidth:Number = this.originalBorderWidth;
+border.width = boxWidth - PADDING;
+```
+This prevents the right side from having excessive padding after the text field is resized.
+
 ### Summary
-This patch fixes the right-side spacing by reducing the dialogue box width by the same `PADDING` value used for the text.
+Adds an easy-to-customize icon offset, removes the empty icon indentation, keeps the icon spacing consistent, and fixes the extra right-side padding by reducing the border width by `PADDING`.
